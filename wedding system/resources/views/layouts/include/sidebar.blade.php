@@ -12,7 +12,7 @@
    } */
 </style>
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-info elevation-4" >
+<aside class="main-sidebar sidebar-dark-danger elevation-4" >
     <!-- Brand Logo -->
     <a href="#!" class="brand-link">
         <img src="" alt="" class="brand-image img-circle elevation-4" style="opacity: .8">
@@ -66,7 +66,7 @@
                                 <p class="pl-3">Guests</p>
                             </a>
                         </li>
-                    </ul>            
+                    </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item ">
                             <a href="{{route('villages.index')}}" class="nav-link  {{ Request::is('villages*')  ? 'active':''  }}">
@@ -74,7 +74,7 @@
                                 <p class="pl-3">Village</p>
                             </a>
                         </li>
-                    </ul>                
+                    </ul>
                 </li>
             </ul>
         </nav>

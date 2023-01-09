@@ -28,7 +28,7 @@
     <!-- fullCalendar -->
     {{-- <link rel="stylesheet" href="{{asset('admin/plugins/fullcalendar/main.css')}}"> --}}
     <link rel="stylesheet" href="{{ asset('admin/font-awesome/css/font-awesome.min.css')}}">
-
+{{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet"/> --}}
     {{-- date rang  --}}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
@@ -77,14 +77,25 @@
 @yield('script')
 <script>
       $(function () {
-    //Initialize Select2 Elements
-    $('.select2').select2()
+            //Initialize Select2 Elements
+            $('.select2').select2()
 
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
-});
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+            theme: 'bootstrap4'
+            })
+        });
+
+        // date range
+
+        $(function() {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left'
+            }, function(start, end, label) {
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
+
 </script>
 
 </body>
