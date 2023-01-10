@@ -8,7 +8,7 @@
             <th style="width: 300px">Action</th>
         </tr>
     </thead>
-    <tbody class="datatable">
+    <tbody id="tbody">
         @forelse ($villages as $key => $item)
             <tr>
                 <td>{{ $key + 1 }}</td>
@@ -53,3 +53,5 @@
 <div class="village_paginate float-right py-2 mb-4 ">
     {!! $villages->appends($_GET)->links() !!}
 </div>
+
+

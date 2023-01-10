@@ -13,8 +13,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h1 class="m-0">Villages <a href="{{route('villages.create')}}" class="btn btn-danger btn-sm "><i class="fa fa-plus" aria-hidden="true"></i> Add New</a>
+                                    <a href="{{ route('villages.index') }}" class="btn btn-sm btn-outline-primary"><i class="fa fa-history" aria-hidden="true"></i></a>
                                 </h1>
-                            </div>                          
+                            </div>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -28,7 +29,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <span>All: ({{$vill_count ? $vill_count : 0}}) | <span class="text-info">Published:</span>  ({{$count_publish ? $count_publish : 0}})</span>
-                    <div class="row mt-4 mb-2">
+                    {{-- <div class="row mt-4 mb-2">
                         <div class="col-md-3 float-right ">
                             <form action="" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -42,7 +43,7 @@
                         <div class="col-md-3">
                             <a class="btn btn-warning float-left" href=""><i class="fa fa-sign-out" aria-hidden="true"></i> Export</a>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row py-4">
                         <div class="col-md-4 ">
                             <div class="row">
@@ -69,8 +70,9 @@
 
                         </div>
                         <div class="col-md-4">
-                            <form class="d-flex float-right" role="search">
-                                <input class="form-control mx-1" name="serach" id="search" style="width: 250px;" type="search" placeholder="Search here" aria-label="Search">
+                            <form action="{{route('villages.index')}}" method="GET" class="d-flex float-right" role="search">
+                                <input class="form-control mx-1" value="{{ \Request::get('search') }}"
+                                 name="search" id="search" style="width: 250px;" type="search" placeholder="Search here" aria-label="Search">
                                 <button class="btn btn-danger mx-1" type="submit">Search</button>
                             </form>
                         </div>
@@ -83,8 +85,8 @@
                                 {{ session('message') }}
                             </div>
                         @endif
-                        @include('village.paginate')    
-                    </div>              
+                        @include('village.paginate')
+                    </div>
                 </div>
             </div>
         </section>
@@ -97,15 +99,14 @@
 @section('script')
 
 <script>
-   
-   
-   $(function (){
+
     // pagination
+   $(function (){
         $('body').delegate('.village_paginate a','click',function (){
             event.preventDefault();
             var page = $(this).attr('href').split('page=')[1];
-            fetch_data(page);    
-             
+            fetch_data(page);
+
         });
 
         function fetch_data(page){
@@ -115,45 +116,14 @@
                 url: "{{route('villages.fetch_data') }}",
                 data:  {_token: _token, page:page},
                 success: function(data) {
-                    $('#show-village').html(data);                  
+                    $('#show-village').html(data);
                 }
-            });         
+            });
         }
-
-        // search 
-        // $('#search').on('keyup', function(){
-        //     var value =$(this).val();
-        //     $.ajax({
-        //         url: "{{route('search')}}",
-        //         method: "GET",
-        //         data:{search: value},
-        //         success:function(data){
-        //             var villages = data.villages;
-        //             var html ='';
-        //             if(villages.length > 0 ){
-        //                 for(let i = 0; i <villages.length; i++){
-        //                     html += '<tr>\
-        //                                 <td>'+villages[i][id]+'</td>\
-        //                                 <td>'+villages[i][name]+'</td>\
-        //                                 <td>'+villages[i][noted]+'</td>\
-        //                                 <td>'+villages[i][status]+'</td>\
-                                      
-        //                             </tr>';
-        //                 }
-        //             }else{
-        //                 html +='<tr>\
-        //                             <td>No village available</td>\
-        //                         </tr>';
-        //             }
-        //             $('.datatable').html(html);
-                    
-        //         }
-        //     });
-        // });
-   
     });
 
-    
+
+
 </script>
 
 @endsection

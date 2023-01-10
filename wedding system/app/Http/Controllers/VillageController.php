@@ -8,35 +8,41 @@ use Illuminate\Support\Facades\Auth;
 
 class VillageController extends Controller
 {
+    public $page_limit = 2;
     public function index(Request $request)
     {
         $vill_count = Village::count();
         $count_publish = Village::where('status',1)->count();
-         $villages = Village::simplePaginate(8);
-        
-         return view('village.index', compact('villages','vill_count','count_publish'));
-      
+        //  $villages = Village::simplePaginate(2);
+
+        // $display =  Request::get('search');
+        $display = $request->get('display') ? $request->get('display') : $this->page_limit;
+        $villages = Village::Filter($request)->orderBy('id', 'DESC')->simplePaginate(2);
+
+            return view('village.index', compact('villages','vill_count','count_publish'))->with('i', ($request->input('page', 1) - 1) * $display);
     }
 
-    // search 
+    // search
     // public function search(Request $request){
-    //     $query = Village::query();
-        
-    //     if ($request->ajax()) {
-    //         $data = Village::where('name','LIKE','%'.$request->search.'%')
-    //         ->orWhere('noted','LIKE','%'.$request->search.'%')->get();
-    //         return response()->json(['data' => $data]);
-    //     }else{
-    //         $villages = $query->get();
-    //         return view('village.index', compact('villages'));
-    //     }       
+    //     // $query = Village::query();
+
+    //     // if ($request->ajax()) {
+    //     //     $data = Village::where('name','LIKE','%'.$request->search.'%')
+    //     //     ->orWhere('noted','LIKE','%'.$request->search.'%')->get();
+    //     //     return response()->json($data);
+    //     // }
+    //     // else{
+    //     //     $data = $query->get();
+    //     //     return view('village.paginate', compact('data'));
+    //     // }
+
     // }
-    
+
     function fetch_data(Request $request)
     {
         if($request->ajax())
         {
-            $villages = Village::simplePaginate(8);
+            $villages = Village::simplePaginate(2);
             return view('village.paginate', compact('villages'))->render();
         }
     }
