@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Faculties Dashboard')
+@section('title', 'Village create')
 @section('content')
 
 
@@ -13,11 +13,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h1 class="m-0">Villages <a href="{{ route('villages.index') }}"
-                                        class="btn btn-outline-primary btn-sm "><i class="fa fa-arrow-left" aria-hidden="true"></i> Leave</a>
+                                    class="btn btn-outline-primary btn-sm "><i class="fa fa-arrow-left" aria-hidden="true"></i> Leave</a>
                                 </h1>
                             </div>
                         </div>
-
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -41,13 +40,13 @@
                                             <div class="row mb-3">
                                                 <label class="col-sm-2 col-form-label">Name <span class="text-danger"> *</span></label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" name="name" placeholder="Name" @if(isset($village)) value="{{$village->name}}" @endif class="form-control" required>
+                                                    <input type="text" name="name" placeholder="Name" @if(isset($village)) value="{{$village->name}}" @endif class="form-control" autofocus required>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <label class="col-sm-2 col-form-label">Describe</label>
                                                 <div class="col-sm-10">
-                                                    <textarea class="form-control" name="noted" placeholder="Describe here ( Optional )">@if(isset($village)) {{$village->name}} @endif</textarea>
+                                                    <textarea class="form-control" name="noted" placeholder="Describe here ( Optional )">@if(isset($village)) {{$village->noted}} @endif</textarea>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">

@@ -65,7 +65,7 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('admin/dist/js/adminlte.min.js') }}"></script>
     <!-- Select2 -->
-    <script src="{{asset('admin/plugins/select2/js/select2.full.min.js')}}"></script>
+    {{-- <script src="{{asset('admin/plugins/select2/js/select2.full.min.js')}}"></script> --}}
 
     {{-- date rang  --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -76,25 +76,38 @@
 
 @yield('script')
 <script>
-      $(function () {
-            //Initialize Select2 Elements
-            $('.select2').select2()
+        // $(function () {
+        //     //Initialize Select2 Elements
+        //     $('.select2').select2()
 
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-            theme: 'bootstrap4'
-            })
-        });
+        //     //Initialize Select2 Elements
+        //     $('.select2bs4').select2({
+        //         theme: 'bootstrap4'
+        //     })
+        // });
 
         // date range
 
         $(function() {
-            $('input[name="daterange"]').daterangepicker({
-                opens: 'left'
-            }, function(start, end, label) {
-                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+
+            $('input[name="datefilter"]').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
             });
+
+            $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            });
+
+            $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
         });
+
+       
 
 </script>
 

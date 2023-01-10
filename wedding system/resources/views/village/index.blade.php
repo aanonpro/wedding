@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Faculties Dashboard')
+@section('title', 'Village view')
 @section('content')
 
 
-    <div class="content-wrapper">
+    <div class="content-wrapper ">
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -14,24 +14,8 @@
                             <div class="col-md-6">
                                 <h1 class="m-0">Villages <a href="{{route('villages.create')}}" class="btn btn-danger btn-sm "><i class="fa fa-plus" aria-hidden="true"></i> Add New</a>
                                 </h1>
-                            </div>
-
-                            <div class="col-md-3 float-right ">
-                                <form action="" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="input-group mb-3">
-                                        <input type="file" class="form-control"
-                                            aria-label="Upload" name="file" required>
-                                        <button class="btn btn-outline-success  mx-1"><i class="fa fa-cloud-download" aria-hidden="true"></i> Import</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-3">
-                                <a class="btn btn-warning float-left" href=""><i class="fa fa-sign-out" aria-hidden="true"></i> Export</a>
-                            </div>
+                            </div>                          
                         </div>
-
-
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -44,7 +28,21 @@
                 <div class="row">
                   <div class="col-md-12">
                     <span>All: ({{$vill_count ? $vill_count : 0}}) | <span class="text-info">Published:</span>  ({{$count_publish ? $count_publish : 0}})</span>
-
+                    <div class="row mt-4 mb-2">
+                        <div class="col-md-3 float-right ">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="input-group mb-3">
+                                    <input type="file" class="form-control"
+                                        aria-label="Upload" name="file" required>
+                                    <button class="btn btn-outline-success"><i class="fa fa-cloud-download" aria-hidden="true"></i> Import</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="btn btn-warning float-left" href=""><i class="fa fa-sign-out" aria-hidden="true"></i> Export</a>
+                        </div>
+                    </div>
                     <div class="row py-4">
                         <div class="col-md-4 ">
                             <div class="row">
@@ -64,7 +62,7 @@
                             <div class="row">
                                 <label  class="col-sm-2 col-form-label">Date</label>
                                 <div class="col-sm-10 ">
-                                    <input type="text" class="form-control" name="daterange" value="01/01/2018 - 01/15/2018" />
+                                    <input type="text" class="form-control" name="datefilter" value="01/01/2023 - 01/15/2023" />
                                     {{-- <button class="btn btn-outline-danger mx-1" type="submit">Search</button> --}}
                                 </div>
                             </div>
@@ -72,69 +70,21 @@
                         </div>
                         <div class="col-md-4">
                             <form class="d-flex float-right" role="search">
-                                <input class="form-control mx-1" style="width: 250px;" type="search" placeholder="Search here" aria-label="Search">
+                                <input class="form-control mx-1" name="serach" id="search" style="width: 250px;" type="search" placeholder="Search here" aria-label="Search">
                                 <button class="btn btn-danger mx-1" type="submit">Search</button>
                             </form>
                         </div>
                     </div>
                   </div>
-
-                    <div class="col-md-12">
+                    @csrf
+                    <div class="col-md-12 " id="show-village" >
                         @if (session('message'))
                             <div class="alert alert-info" role="alert">
                                 {{ session('message') }}
                             </div>
                         @endif
-                        <table class="table table-bordered table-striped" style="background-color: white;">
-                            <thead>
-                                <tr class="text-center">
-                                    <th style="width: 10px">#</th>
-                                    <th>Name</th>
-                                    <th>Noted</th>
-                                    <th>Status</th>
-                                    <th style="width: 300px">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($villages as $key => $item)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item->name ? $item->name : '---' }}</td>
-                                        <td>{{ $item->noted ? $item->noted : '---' }}</td>
-                                        <td>
-                                            @if ($item->status == 1)
-                                            <button class="btn btn-sm btn-outline-success">Active  <i class="fa fa-circle text-success" aria-hidden="true"></i></button>
-                                            {{-- <span class="badge bg-defalt">Active <i class="fa fa-circle text-success" aria-hidden="true"></i></span> --}}
-                                            @else
-                                            <button class="btn btn-sm btn-outline-danger">Inactive  <i class="fa fa-circle text-danger" aria-hidden="true"></i></button>
-                                            {{-- <span class="badge bg-defalt">Inactive <i class="fa fa-circle text-danger" aria-hidden="true"></i></span> --}}
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <form action="{{ route('villages.destroy', $item->id) }}"
-                                                method="POST">
-                                                <a href="{{ route('villages.show', $item->id) }}"
-                                                    class=" btn btn-sm btn-outline-info"><i class="fa fa-eye"
-                                                        aria-hidden="true"></i></a>
-                                                <a href="{{ route('villages.edit', $item->id) }}"
-                                                    class=" btn btn-sm btn-outline-warning"><i class="fa fa-pencil-square-o"
-                                                        aria-hidden="true"></i></a>
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-outline-danger "><i class="fa fa-trash-o"
-                                                        aria-hidden="true"></i></button>
-                                            </form>
-                                        </td>
-
-                                    </tr>
-                                @empty
-                                    <td colspan="5" class="text-center py-3">No Data Available</td>
-                                @endforelse
-
-                            </tbody>
-                        </table>
-                        {{-- <span>All: ( ) | <span class="text-info">Published:</span>  ( )</span> --}}
-                    </div>
+                        @include('village.paginate')    
+                    </div>              
                 </div>
             </div>
         </section>
@@ -144,3 +94,66 @@
 
 @endsection
 
+@section('script')
+
+<script>
+   
+   
+   $(function (){
+    // pagination
+        $('body').delegate('.village_paginate a','click',function (){
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            fetch_data(page);    
+             
+        });
+
+        function fetch_data(page){
+            var _token = $("input[name=_token]").val();
+            $.ajax({
+                method: "POST",
+                url: "{{route('villages.fetch_data') }}",
+                data:  {_token: _token, page:page},
+                success: function(data) {
+                    $('#show-village').html(data);                  
+                }
+            });         
+        }
+
+        // search 
+        // $('#search').on('keyup', function(){
+        //     var value =$(this).val();
+        //     $.ajax({
+        //         url: "{{route('search')}}",
+        //         method: "GET",
+        //         data:{search: value},
+        //         success:function(data){
+        //             var villages = data.villages;
+        //             var html ='';
+        //             if(villages.length > 0 ){
+        //                 for(let i = 0; i <villages.length; i++){
+        //                     html += '<tr>\
+        //                                 <td>'+villages[i][id]+'</td>\
+        //                                 <td>'+villages[i][name]+'</td>\
+        //                                 <td>'+villages[i][noted]+'</td>\
+        //                                 <td>'+villages[i][status]+'</td>\
+                                      
+        //                             </tr>';
+        //                 }
+        //             }else{
+        //                 html +='<tr>\
+        //                             <td>No village available</td>\
+        //                         </tr>';
+        //             }
+        //             $('.datatable').html(html);
+                    
+        //         }
+        //     });
+        // });
+   
+    });
+
+    
+</script>
+
+@endsection

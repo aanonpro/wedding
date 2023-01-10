@@ -8,12 +8,37 @@ use Illuminate\Support\Facades\Auth;
 
 class VillageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $vill_count = Village::count();
         $count_publish = Village::where('status',1)->count();
-        $villages = Village::all();
-        return view('village.index', compact('villages','vill_count','count_publish'));
+         $villages = Village::simplePaginate(8);
+        
+         return view('village.index', compact('villages','vill_count','count_publish'));
+      
+    }
+
+    // search 
+    // public function search(Request $request){
+    //     $query = Village::query();
+        
+    //     if ($request->ajax()) {
+    //         $data = Village::where('name','LIKE','%'.$request->search.'%')
+    //         ->orWhere('noted','LIKE','%'.$request->search.'%')->get();
+    //         return response()->json(['data' => $data]);
+    //     }else{
+    //         $villages = $query->get();
+    //         return view('village.index', compact('villages'));
+    //     }       
+    // }
+    
+    function fetch_data(Request $request)
+    {
+        if($request->ajax())
+        {
+            $villages = Village::simplePaginate(8);
+            return view('village.paginate', compact('villages'))->render();
+        }
     }
 
     public function create()
