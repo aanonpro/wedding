@@ -8,41 +8,64 @@ use Illuminate\Support\Facades\Auth;
 
 class VillageController extends Controller
 {
-    public $page_limit = 2;
     public function index(Request $request)
     {
         $vill_count = Village::count();
         $count_publish = Village::where('status',1)->count();
         //  $villages = Village::simplePaginate(2);
 
-        // $display =  Request::get('search');
-        $display = $request->get('display') ? $request->get('display') : $this->page_limit;
-        $villages = Village::Filter($request)->orderBy('id', 'DESC')->simplePaginate(2);
+        //search date 
+        $dateRange = $request->searchDate;
+        $dateArray = explode('-',$dateRange);		
+        $fromDate= null;
+        $toDate = null;
+        $rows = Village::query();
+       
+        if($dateArray[0] != null){   		
+            $fromDate = date("y-m-d",strtotime($dateArray['0']));  
+            $toDate = date("y-m-d",strtotime($dateArray['1']));
+        }
+ 	    if($fromDate && $toDate){
+            $rows->whereDate('created_at','>=',$fromDate)
+                ->whereDate('created_at','<=',$toDate)->latest();
+        }      
+     
+        // search name 
+        $rows->where([
+            ['name', '!=', Null],
+            [function ($query) use ($request) {
+                if (($s = $request->search)) {
+                    $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->orWhere('noted', 'LIKE', '%' . $s . '%')
+                        ->first();
+                }
+            }]
+        ]);
 
-            return view('village.index', compact('villages','vill_count','count_publish'))->with('i', ($request->input('page', 1) - 1) * $display);
+        // search with button selection
+        if ($request->status == 'active') {
+            $rows->where('status',1);
+            $status = 'Active';
+        }
+        elseif ($request->status == 'inactive') {
+            $rows->where('status', 0);
+            $status = 'Inactive';
+        }
+        else {
+            $status = 'All Status';
+        }                                                                                                                                                                                                                                       
+
+        $villages = $rows->latest()->simplePaginate(4);
+
+        return view('village.index', compact('villages','status','vill_count','count_publish'));
     }
 
-    // search
-    // public function search(Request $request){
-    //     // $query = Village::query();
-
-    //     // if ($request->ajax()) {
-    //     //     $data = Village::where('name','LIKE','%'.$request->search.'%')
-    //     //     ->orWhere('noted','LIKE','%'.$request->search.'%')->get();
-    //     //     return response()->json($data);
-    //     // }
-    //     // else{
-    //     //     $data = $query->get();
-    //     //     return view('village.paginate', compact('data'));
-    //     // }
-
-    // }
-
+    // paginate with ajax request
     function fetch_data(Request $request)
     {
         if($request->ajax())
         {
-            $villages = Village::simplePaginate(2);
+            $villages = Village::simplePaginate(4);
             return view('village.paginate', compact('villages'))->render();
         }
     }

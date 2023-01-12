@@ -20,6 +20,7 @@ Route::middleware(['auth','isAdmin'])->group(function(){
     Route::get('/dashboard',[App\Http\Controllers\DashboardController::class, 'index']);
 
     Route::resource('villages', VillageController::class);
+    Route::get('/villages', VillageController::class, 'index')->name('villages');
     // Route::get('villages', [VillageController::class, 'search'])->name('search');
     Route::post('villages/fetch_data', [VillageController::class, 'fetch_data'])->name('villages.fetch_data');
 

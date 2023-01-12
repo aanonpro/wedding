@@ -1,9 +1,10 @@
-<table class="table table-bordered table-striped " style="background-color: white;">
-    <thead>
+<table class="table table-bordered table-striped " style="background-color: rgb(255, 255, 255);">
+    <thead style="background: rgba(190, 176, 176, 0.863);">
         <tr class="text-center">
             <th style="width: 10px">#</th>
             <th>Name</th>
             <th>Noted</th>
+            <th>Date</th>
             <th>Status</th>
             <th style="width: 300px">Action</th>
         </tr>
@@ -16,10 +17,12 @@
                 <td>
                     @if ($item->noted) <div class="text-center">{{$item->noted}}</div>@else <div class="text-center">---</div> @endif
                 </td>
+                <td class="text-center">{{$item->created_at->translatedFormat('j-M-Y')}}</td>
+              
                 <td>
                     @if ($item->status == 1)
                         <div class="text-center">
-                            <button class="btn btn-sm btn-outline-success">Active  <i class="fa fa-circle text-success" aria-hidden="true"></i></button>
+                            <button class="btn btn-sm btn-outline-success">Active  <i class="fa fa-circle text-success circle" aria-hidden="true"></i></button>
                         </div>
                     @else
                         <div class="text-center">
@@ -45,7 +48,7 @@
 
             </tr>
         @empty
-            <td colspan="5" class="text-center py-3">No Data Available</td>
+            <td colspan="6" class="text-center py-3">No Data Available</td>
         @endforelse
 
     </tbody>

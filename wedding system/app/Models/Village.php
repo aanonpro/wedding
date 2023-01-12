@@ -12,13 +12,13 @@ class Village extends Model
         'name', 'noted', 'status', 'trash', 'created_by' , 'updated_by'
     ];
 
-    public function scopeFilter($query, $request)
-    {
-        if ($request->get('search'))
-        {
-            $query->where('name','LIKE',"%".$request->get('search')."%")
-                    ->orWhere('noted','LIKE',"%".$request->get('search')."%");
-        }
-        return $query;
-    }
+    // public function scopeFilter($query, $request)
+    // {
+    //     if ($request->get('search'))
+    //     {
+    //         $query->where('name','LIKE',"%".$request->get('search')."%")
+    //                 ->orWhere('noted','LIKE',"%".$request->get('search')."%");
+    //     }
+    //     return $query;
+    // }
 }
